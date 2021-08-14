@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import React from "react";
+import Household from "./components/Household";
+import Daily from "./components/Daily";
+import Expense from "./components/Expense";
 
 function App() {
-  // const [name, setName] = useState("yena");
-  
-  // const callback = () => {
-  // console.log(name);
-  //   setName("linlin");
-	// console.log(name);
-  // }
-  
-  // callback();
-  
   return (
     <div className="App">
-      
+      <Household>
+        <Daily>
+          <Expense />
+        </Daily>
+      </Household>
     </div>
   );
 }
