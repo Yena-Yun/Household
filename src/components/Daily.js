@@ -38,7 +38,10 @@ const Daily = ({ index, children, date, income, total }) => {
       </tr>
       <tr>
         <LimeTd align="center">잔액</LimeTd>
-        <LimeTd align="left" colSpan={3}>
+        {/* income이 total보다 적을 때 minus props가 true가 됨 */}
+        <LimeTd align="left" colSpan={3} minus={income < total}>
+          {/* income이 total보다 적을 때만 "[적자]" 띄워줌 */}
+          {income < total ? "[적자]" : null}
           {formatMoney(income - total)}
         </LimeTd>
       </tr>
@@ -59,7 +62,7 @@ const GreenTd = styled.td`
 
 const LimeTd = styled.td`
   background: #bfff00;
-  color: #000000;
+  color: ${(props) => (props.minus ? "#ff0000" : "#000000")};
   text-align: ${(props) => props.align};
 `;
 
