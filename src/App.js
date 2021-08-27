@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { data } from "./lib/data.json";
 import Household from "./components/Household";
@@ -7,14 +7,17 @@ import Expense from "./components/Expense";
 import Form from "./components/Form";
 
 function App() {
-  const sortedData = data
+  // Form에 data 넘기기
+  const [dataInfo, setDataInfo] = useState(data);
+
+  const sortedData = dataInfo
     // 날짜별 먼저 정렬 (a, b 자체가 객체로 꺼낸 것이어서 daily 사용 x)
     .sort((a, b) => {
       // 문자열이어서 단순한 마이너스 연산은 안됨
       //  => data.sort((a, b) => a.date - b.date) (x)
       // 비교 연산(>, <)은 가능
-      if (a.date > b.date) return 1;
-      else if (b.date > a.date) return -1;
+      if (a.date > b.date) return -1;
+      else if (b.date > a.date) return 1;
       else return 0;
     })
 
@@ -48,12 +51,12 @@ function App() {
             total={daily.expenses.reduce((acc, cur) => acc + cur.price, 0)}
           >
             {daily.expenses.map((expense, idx) => (
-              <Expense key={idx} index={idx + 1} name={expense.name} price={expense.price} place={expense.place}></Expense>
+              <Expense key={idx} index={idx + 1} name={expense.name} price={expense.price} place={expense.place} />
             ))}
           </Daily>
         ))}
       </Household>
-      <Form />
+      <Form data={dataInfo} setData={setDataInfo} />
     </Container>
   );
 }

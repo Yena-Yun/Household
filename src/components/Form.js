@@ -15,13 +15,15 @@ const Form = ({ data, setData }) => {
 
   // 가계부에 항목 추가하기
   const handleAdd = () => {
-    // 입력된 날짜가 없거나, 가격을 숫자로 바꾼 것이 숫자가 아닐 경우 종료 (함수 실행 x)
+    console.log("handleAdd 실행!");
+
+    // 입력된 날짜가 없거나, 가격을 숫자로 바꾼 것이 숫자가 아닐 경우 바로 종료
     if (!date) return;
     if (isNaN(Number(price))) return;
 
     // 입력된 날짜를 연, 월, 일로 구분하여 문자열로 바꾼 뒤 변수에 담음
     const year = date.getFullYear().toString();
-    const month = String(date.getMonth() + 1); // month도 문자로 바꿔줘야 하는데 단지 toString() 안 쓰고 String() 사용 & month는 + 1 해줘야
+    const month = String(date.getMonth() + 1); // month는 뒤에 1 더해주는 것 때문에 toString()말고 String()으로 묶어줌
     const day = date.getDate().toString();
 
     // 연, 월, 일 변수들을 합쳐서 strDate 변수 생성
@@ -32,6 +34,7 @@ const Form = ({ data, setData }) => {
     // 기존에 해당 날짜의 항목이 이미 있는지 확인
     // Array.findIndex(): 배열에서 하나씩 꺼내서 조건에 맞는 경우의 인덱스 반환
     const selectDataIndex = data.findIndex((daily) => daily.date === strDate);
+    console.log(selectDataIndex);
 
     // 새로 입력된 날짜를 가진 항목이 없는 경우
     if (selectDataIndex === -1) {
@@ -54,19 +57,19 @@ const Form = ({ data, setData }) => {
         },
       ]);
 
-      // 새로 입력된 날짜와 동일한 날짜를 가진 항목이 있는 경우
-      // 	=> 객체를 새로 추가하는 게 아니라 날짜를 제외한 다른 항목들을 수정해주면 됨
+      // 새로 입력된 날짜와 동일한 항목이 이미 존재하는 경우
+      // 	=> 객체를 새로 추가 x, 해당 날짜의 날짜를 제외한 다른 항목들만 수정
     } else {
       // 입력한 날짜와 다른 daily 객체들만 filter해서 따로 담아둠 (유지)
       const filteredData = data.filter((daily) => daily.date !== strDate);
-      // data에서 입력된 날짜의 인덱스 위치에 있는 daily 객체를 전체 복사 (사본 만들기)
+      // 입력된 날짜와 동일한 daily 객체를 인덱스로 찾아 변수에 따로 담음 (사본 생성)
       const selectData = data[selectDataIndex];
 
-      // 사본 객체 작업 (필요한 부분만 수정, income은 변동없음)
-      // expenses에 입력된 name, price, place로 만들어진 객체 추가
-      selectData.expenses.push({ name, price: Number(price), place });
+      // 사본 수정 (income은 변동 없으므로 제외)
+      // expenses 배열에 입력된 name, price, place로 만들어진 객체를 맨 앞에 추가
+      selectData.expenses.unshift({ name, price: Number(price), place });
 
-      // 기존 data와 수정된 data를 set함수에 넣어 data 업데이트
+      // 기존 유지된 data와 새로 수정된 data를 setter에 넣어 data 업데이트
       setData([...filteredData, selectData]);
     }
 
