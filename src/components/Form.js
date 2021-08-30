@@ -40,13 +40,12 @@ const Form = ({ data, setData }) => {
     const selectDataIndex = data.findIndex((daily) => daily.date === strDate);
     console.log(selectDataIndex);
 
-    // 새로 입력된 날짜를 가진 항목이 없는 경우
+    // 새로 입력된 날짜를 가진 항목이 없는 경우 => 신규 작성
     if (selectDataIndex === -1) {
-      // 아예 daily 객체 자체가 없다는 뜻 => 항목 새로 추가
-      setData([
-        // 기존 daily 객체들은 유지
+      const addedData = [
+        // 기존의 daily 항목들은 유지
         ...data,
-        // 새로 daily 객체 추가
+        // 새로운 daily 객체 추가
         {
           date: strDate, // 날짜는 입력된 날짜
           income: 0, // 수입은 처음엔 0이라고 가정
@@ -60,22 +59,29 @@ const Form = ({ data, setData }) => {
             },
           ],
         },
-      ]);
+      ];
+      localStorage.setItem("data", JSON.stringify(addedData));
+      setData(addedData);
 
       // 새로 입력된 날짜와 동일한 항목이 이미 존재하는 경우
       // 	=> 객체를 새로 추가 x, 해당 날짜의 날짜를 제외한 다른 항목들만 수정
     } else {
-      // 입력한 날짜와 다른 daily 객체들만 filter해서 따로 담아둠 (유지)
+      // 입력한 날짜와 다른 daily 객체들만 filter해서 따로 유지
       const filteredData = data.filter((daily) => daily.date !== strDate);
-      // 입력된 날짜와 동일한 daily 객체를 인덱스로 찾아 변수에 따로 담음 (사본 생성)
+      // 입력된 날짜와 동일한 daily 객체를 인덱스로 찾아 변수에 담음 (사본 생성)
       const selectData = data[selectDataIndex];
 
       // 사본 수정 (income은 변동 없으므로 제외)
       // expenses 배열에 입력된 name, price, place로 만들어진 객체를 맨 앞에 추가
       selectData.expenses.unshift({ id: maxId + 1, name, price: Number(price), place });
 
-      // 기존 유지된 data와 새로 수정된 data를 setter에 넣어 data 업데이트
-      setData([...filteredData, selectData]);
+      // 수정된 데이터를 변수에 담은 뒤
+      const modifiedData = [...filteredData, selectData];
+
+      // 로컬스토리지에 추가하고
+      localStorage.setItem("data", JSON.stringify(modifiedData));
+      // setData에 넣어 App의 data 업데이트
+      setData(modifiedData);
     }
 
     console.log(data);
