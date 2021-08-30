@@ -15,7 +15,11 @@ const Form = ({ data, setData }) => {
 
   // 가계부에 항목 추가하기
   const handleAdd = () => {
-    console.log("handleAdd 실행!");
+    // 항목 추가 시 id로 넣어줄 maxId 만들기
+    const maxId = data.reduce((acc, daily) => {
+      const maxDailyId = daily.expenses.reduce((acc, expense) => (expense.id > acc ? expense.id : acc), 0);
+      return acc > maxDailyId ? acc : maxDailyId;
+    }, 0);
 
     // 입력된 날짜가 없거나, 가격을 숫자로 바꾼 것이 숫자가 아닐 경우 바로 종료
     if (!date) return;
@@ -49,6 +53,7 @@ const Form = ({ data, setData }) => {
           expenses: [
             // 비용은
             {
+              id: maxId + 1,
               name, // 품목은 입력된 name
               price: Number(price), // 가격은 입력된 price를 숫자로 바꾼 것
               place, // 구입처는 입력된 place
@@ -67,7 +72,7 @@ const Form = ({ data, setData }) => {
 
       // 사본 수정 (income은 변동 없으므로 제외)
       // expenses 배열에 입력된 name, price, place로 만들어진 객체를 맨 앞에 추가
-      selectData.expenses.unshift({ name, price: Number(price), place });
+      selectData.expenses.unshift({ id: maxId + 1, name, price: Number(price), place });
 
       // 기존 유지된 data와 새로 수정된 data를 setter에 넣어 data 업데이트
       setData([...filteredData, selectData]);

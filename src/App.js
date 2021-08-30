@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { data } from "./lib/data.json";
+import { data as initialData } from "./lib/data.json";
 import Household from "./components/Household";
 import Daily from "./components/Daily";
 import Expense from "./components/Expense";
@@ -8,9 +8,9 @@ import Form from "./components/Form";
 
 function App() {
   // Form에 data 넘기기
-  const [dataInfo, setDataInfo] = useState(data);
+  const [data, setData] = useState(initialData);
 
-  const sortedData = dataInfo
+  const sortedData = data
     // 날짜별 먼저 정렬 (a, b 자체가 객체로 꺼낸 것이어서 daily 사용 x)
     .sort((a, b) => {
       // 문자열이어서 단순한 마이너스 연산은 안됨
@@ -38,6 +38,16 @@ function App() {
       };
     });
 
+  const handleRemove = (id) => {
+    const removedData = data.map((daily) => {
+      return {
+        ...daily,
+        expenses: daily.expenses.filter((expense) => expense.id !== id),
+      };
+    });
+    setData(removedData);
+  };
+
   return (
     <Container>
       <Household>
@@ -51,12 +61,20 @@ function App() {
             total={daily.expenses.reduce((acc, cur) => acc + cur.price, 0)}
           >
             {daily.expenses.map((expense, idx) => (
-              <Expense key={idx} index={idx + 1} name={expense.name} price={expense.price} place={expense.place} />
+              <Expense
+                key={idx}
+                id={expense.id}
+                index={idx + 1}
+                name={expense.name}
+                price={expense.price}
+                place={expense.place}
+                onRemove={handleRemove}
+              />
             ))}
           </Daily>
         ))}
       </Household>
-      <Form data={dataInfo} setData={setDataInfo} />
+      <Form data={data} setData={setData} />
     </Container>
   );
 }
