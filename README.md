@@ -1,5 +1,5 @@
 # Household
-리액트 가계부 만들기<br/>
+리액트 가계부 만들기
 
 참고사이트: 조종훈 님 블로그 <br/>
 https://chojonghoon.github.io/react/report/household/report-household/ <br/>
@@ -18,8 +18,8 @@ https://chojonghoon.github.io/react/report/household/report-household/ <br/>
   * 각 항목은 예시 화면처럼 정렬(중앙, 좌측, 우측)
   * 날짜별로 구입처별 내림차별 정렬하여 표시(데이터는 무작위 입력)
 
-## 컴포넌트 나누기
-<img src="https://i.esdrop.com/d/KwrGH1p1Zl/v5nSLzxOqX.png" width="500" height="auto"> <br/>
+## 컴포넌트 구분
+<img src="https://i.esdrop.com/d/KwrGH1p1Zl/v5nSLzxOqX.png" width="350" height="auto"> <br/>
 1. Household(빨간색) : 전체 컨테이너
 2. Daily(주황색) : 날짜별 수입 및 지출내역
 3. Expense(보라색) : 같은 날짜 내의 하나의 지출항목
@@ -32,4 +32,3 @@ https://chojonghoon.github.io/react/report/household/report-household/ <br/>
 5. 각 지출항목에 hover 시 삭제 기능
 6. 수입란 클릭 시 수입 수정 기능
 7. local storage 연동
-8. ~~<디자인 수정…?
