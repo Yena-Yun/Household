@@ -85,48 +85,64 @@ function App() {
   };
 
   return (
-    <Container>
-      <Household>
-        {/* Household 안에 sort된 Daily */}
-        {sortedData.map((daily, idx) => (
-          <Daily
-            key={idx}
-            index={idx + 1}
-            date={daily.date}
-            income={daily.income}
-            // Array.reduce((acc, cur) => { }, 0) - acc: 누적값, cur: 현재 더할 값
-            total={daily.expenses.reduce((acc, cur) => acc + cur.price, 0)}
-            // modify는 기존 데이터에서 하나씩 뽑은 각 항목의 idx에 +1 한 값이 넘어감
-            // (첫번째 항목은 idx가 0이므로 +1을 해줘야 modify가 0이 되지 않음)
-            // (0은 나중에 setModify에서 modify를 'false'로 바꿀 때 사용)
-            modify={modify === idx + 1}
-            setModify={setModify}
-            onModify={handleModifyIncome}
-          >
-            {/* Daily 안에 Expense */}
-            {daily.expenses.map((expense, idx) => (
-              <Expense
-                key={idx}
-                id={expense.id}
-                index={idx + 1}
-                name={expense.name}
-                price={expense.price}
-                place={expense.place}
-                onRemove={handleRemove}
-              />
-            ))}
-          </Daily>
-        ))}
-      </Household>
-
-      {/* 화면 우측의 입력 폼 */}
-      <Form data={data} setData={setData} />
-    </Container>
+    <Wrapper>
+      <Title>윤예나 님, 환영합니다!</Title>
+      <Container>
+        {/* 화면 좌측의 입력 폼 */}
+        <Form data={data} setData={setData} />
+        <Household>
+          {/* Household 안에 sort된 Daily */}
+          {sortedData.map((daily, idx) => (
+            <Daily
+              key={idx}
+              index={idx + 1}
+              date={daily.date}
+              income={daily.income}
+              // Array.reduce((acc, cur) => { }, 0) - acc: 누적값, cur: 현재 더할 값
+              total={daily.expenses.reduce((acc, cur) => acc + cur.price, 0)}
+              // modify는 기존 데이터에서 하나씩 뽑은 각 항목의 idx에 +1 한 값이 넘어감
+              // (첫번째 항목은 idx가 0이므로 +1을 해줘야 modify가 0이 되지 않음)
+              // (0은 나중에 setModify에서 modify를 'false'로 바꿀 때 사용)
+              modify={modify === idx + 1}
+              setModify={setModify}
+              onModify={handleModifyIncome}
+            >
+              {/* Daily 안에 Expense */}
+              {daily.expenses.map((expense, idx) => (
+                <Expense
+                  key={idx}
+                  id={expense.id}
+                  index={idx + 1}
+                  name={expense.name}
+                  price={expense.price}
+                  place={expense.place}
+                  onRemove={handleRemove}
+                />
+              ))}
+            </Daily>
+          ))}
+        </Household>
+      </Container>
+    </Wrapper>
   );
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-family: 'Nanum Gothic Coding', monospace;
+`;
+
+const Title = styled.div`
+  height: 7vh;
+  font-size: 18px;
+  text-align: center;
+  line-height: 7vh;
+`;
+
 const Container = styled.div`
   display: flex;
+  background-color: whitesmoke;
 `;
 
 export default App;

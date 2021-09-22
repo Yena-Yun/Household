@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import DateFnsUtils from "@date-io/date-fns";
-import koLocale from "date-fns/locale/ko";
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
-import { TextField, Button } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import DateFnsUtils from '@date-io/date-fns';
+import koLocale from 'date-fns/locale/ko';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import { TextField, Button } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 const Form = ({ data, setData }) => {
   const [date, setDate] = useState(new Date());
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [place, setPlace] = useState("");
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [place, setPlace] = useState('');
   const classes = useStyles();
 
   // 가계부에 항목 추가하기
@@ -32,7 +32,7 @@ const Form = ({ data, setData }) => {
 
     // 연, 월, 일 변수들을 합쳐서 strDate 변수 생성
     // (월, 일의 경우 두 자리면 그대로 넣고, 한 자리면 앞에 "0" 추가)
-    const strDate = year + (month[1] ? month : "0" + month) + (day[1] ? day : "0" + day);
+    const strDate = year + (month[1] ? month : '0' + month) + (day[1] ? day : '0' + day);
 
     // 기존 객체의 date와 입력된 date를 비교하여
     // 기존에 해당 날짜의 항목이 이미 있는지 확인
@@ -60,7 +60,7 @@ const Form = ({ data, setData }) => {
           ],
         },
       ];
-      localStorage.setItem("data", JSON.stringify(addedData));
+      localStorage.setItem('data', JSON.stringify(addedData));
       setData(addedData);
 
       // 새로 입력된 날짜와 동일한 항목이 이미 존재하는 경우
@@ -79,7 +79,7 @@ const Form = ({ data, setData }) => {
       const modifiedData = [...filteredData, selectData];
 
       // 로컬스토리지에 추가하고
-      localStorage.setItem("data", JSON.stringify(modifiedData));
+      localStorage.setItem('data', JSON.stringify(modifiedData));
       // setData에 넣어 App의 data 업데이트
       setData(modifiedData);
     }
@@ -93,49 +93,49 @@ const Form = ({ data, setData }) => {
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={koLocale}>
         <KeyboardDatePicker
           autoOk
-          variant="inline"
-          inputVariant="outlined"
-          margin="normal"
+          variant='inline'
+          inputVariant='outlined'
+          margin='normal'
           fullWidth
           className={classes.textField}
-          format="yyyy/MM/dd"
-          label="날짜"
+          format='yyyy/MM/dd'
+          label='날짜'
           value={date}
           onChange={(date) => setDate(date)}
         />
       </MuiPickersUtilsProvider>
       <br />
       <TextField
-        variant="outlined"
-        margin="normal"
+        variant='outlined'
+        margin='normal'
         fullWidth
         className={classes.textField}
-        label="품목"
+        label='품목'
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
       <br />
       <TextField
-        variant="outlined"
-        margin="normal"
+        variant='outlined'
+        margin='normal'
         fullWidth
         className={classes.textField}
-        label="가격"
+        label='가격'
         value={price}
         onChange={(e) => setPrice(e.target.value)}
       />
       <br />
       <TextField
-        variant="outlined"
-        margin="normal"
+        variant='outlined'
+        margin='normal'
         fullWidth
         className={classes.textField}
-        label="구입처"
+        label='구입처'
         value={place}
         onChange={(e) => setPlace(e.target.value)}
       />
       <br />
-      <Button onClick={() => handleAdd()} variant="contained" color="primary" fullWidth className={classes.button}>
+      <Button onClick={() => handleAdd()} variant='contained' color='primary' fullWidth className={classes.button}>
         추가
       </Button>
     </Wrapper>
@@ -145,12 +145,14 @@ const Form = ({ data, setData }) => {
 const Wrapper = styled.div`
   flex: 1;
   text-align: center;
+  padding-top: 30px;
 `;
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     textField: {
       maxWidth: 300,
+      backgroundColor: '#fff',
     },
     button: {
       marginTop: theme.spacing(3),
