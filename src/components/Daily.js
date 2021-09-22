@@ -1,30 +1,27 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import formatDate from "../lib/formatDate";
-import formatMoney from "../lib/formatMoney";
-import EditIcon from "@material-ui/icons/Edit";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import formatDate from '../lib/formatDate';
+import formatMoney from '../lib/formatMoney';
+import EditIcon from '@material-ui/icons/Edit';
 
 const Daily = ({ index, children, date, income, total, modify, setModify, onModify }) => {
-  // 초기값으로 'String'화 된 income을 넣어줌
-  // 입력된 값은 문자열로 간주 -> 초기값도 문자열
-  // (이후 수정하기 위해 함수에 넘길 때 '숫자'로 바꿈)
+  // 수입 초기값: string 형태의 income (사용자에 의해 입력된 값은 '문자열'로 간주하므로)
   const [incomeValue, setIncomeValue] = useState(String(income));
 
-  // 키보드 keycode 관리
+  // 엔터 처리
   const handleKeyDown = (e) => {
-    // (엔터키 대신) 특정 키보드 키를 누른 경우 새로고침 막기
+    // (엔터키 대신) 다른 특정 키보드 누른 경우 새로고침 막기
     // 69: e(소문자 e) , 190: '.'(마침표) , 109: '-(숫자패드 빼기)', 189: '-'(대쉬)
     // (계산기에서 e -> 10의 지수 (예: 2.5e13), 마침표는 소수점)
     if (e.keycode === 69 || e.keycode === 190 || e.keycode === 109 || e.keycode === 189) {
       e.preventDefault();
     }
 
-    // 엔터키를 누른 경우 수정된 수입 반영
-    if (e.key === "Enter") {
-      // App의 수입을 수정하는 함수에 해당 항목의 자체 index(App에서 받아옴)와
-      // 수정창에 입력된 값(incomeValue)을 '숫자'로 바꿔서 넣어줌
-      // (  => 입력된 값은 기본적으로 문자열로 간주)
+    // ** 엔터키를 누른 경우
+    if (e.key === 'Enter') {
+      // 수입수정: 받아온 index와 사용자가 입력한 incomeValue(문자열)를 Number화 해서 넣어줌
       onModify(index, Number(incomeValue));
+      // 마우스 hover 여부 -> (인덱스로 처리중) 0으로 초기화
       setModify(0);
     }
   };
@@ -32,118 +29,130 @@ const Daily = ({ index, children, date, income, total, modify, setModify, onModi
   return (
     <tbody>
       <tr>
+        {/* rowspan: 세로로 병합 */}
         <IndexTd rowSpan={children.length + 5}>{index}</IndexTd>
-        <GreenTd align="center">날짜:{formatDate(date)}</GreenTd>
-        <GreenTd align="center">수입</GreenTd>
-        <GreenTd align="left" colSpan={2}>
-          {/* (아래에서 연필 아이콘 클릭 후 setModify가 실행되어) modify에 값이 있으면 */}
+        <FieldTd align='center'>{formatDate(date)}</FieldTd>
+        <FieldTd align='center'>수입</FieldTd>
+        <FieldTd align='left' colSpan={2}>
+          &nbsp;
+          {/* 연필 아이콘을 클릭하여 modify값이 존재할 때 */}
           {modify ? (
-            // 수정 시작 - input창이 나타나고 입력된 값이 setIncomeValue로 들어감
+            // 수입을 수정할 input창 나타남
             <IncomeTextField
-              // input 창에 있는 값 = incomeValue
+              // 주의: type이 number라고 해서 입력값이 '숫자'로 바뀌는 게 아니라 input창 옆에 위아래 증감버튼이 생길 뿐
+              // 기본적으로 input창에 입력되는 값은 '문자열' -> 숫자로 바꾸는 건 Number(), parseInt() 통해 따로 처리 필요)
+              type='number'
+              // value는 incomeValue
               value={incomeValue}
-              // type이 number라고 해서 입력값이 숫자인 게 아니라
-              // input창 옆에 위아래 숫자 조절버튼이 생길 뿐
-              // (input창에 기본적으로 입력되는 값은 '문자열' -> 숫자로 바꾸는 건 Number() 등으로 따로 처리 필요)
-              type="number"
-              // input 창에 입력된 값으로 incomeValue 업데이트
+              // setIncomeValue에 입력된 값(e.target.value)을 넣어 incomeValue 업데이트
               onChange={(e) => setIncomeValue(e.target.value)}
-              // 키보드 키를 누르면 handleKeyDown 실행 (= 엔터키 실행용)
+              // 엔터 처리
               onKeyDown={handleKeyDown}
-              // 새로고침 시 자동 커서 깜박임
-              autoFocus
             />
           ) : (
-            // 아직 modify에 값이 없을 때 (= 연필 아이콘 누르기 전)
+            // 연필 아이콘을 아직 클릭 안 해서 modify값이 없을 때
             <>
-              {/* formatMoney로 현재 income을 보여줌 */}
+              {/* 현재 income 보여주기 */}
               {formatMoney(income)}
-              {/* ModifyButton 영역에 있는 EditIcon(연필 아이콘)을 클릭하면
-                  setModify에 index를 넣어 modify가 값을 갖게 함 */}
-              {/* (true/false 대신 App에서 Daily를 통해 가져온 index 활용) */}
+
+              {/* 연필 아이콘에 onClick 이벤트 미리 넣어둠 */}
               <ModifyButton
+                // 아이콘 클릭 시
                 onClick={() => {
-                  // 수정 버튼 눌렀을 때 기존 income값이 input창 안에 들어가 있도록
-                  // (input 창 안의 값은 문자열이어야 하므로 String())
-                  // => setModify로 modify가 true가 되면 위의 IncomeTextField 내용이 실행되면서 안의 value로 incomeValue가 들어가 있게 됨
+                  // 기존 수입이 input에 미리 들어가 있도록 하고(input 안의 값은 문자열)
                   setIncomeValue(String(income));
+                  // setModify에 index 넣어서 modify값이 존재하게 함
                   setModify(index);
                 }}
               >
-                <EditIcon />
+                <EditIcon color='action' fontSize='small' />
               </ModifyButton>
             </>
           )}
-        </GreenTd>
+        </FieldTd>
       </tr>
       <tr>
-        <GreenTd align="center">번호</GreenTd>
-        <GreenTd align="center">품목</GreenTd>
-        <GreenTd align="center">가격</GreenTd>
-        <GreenTd align="center">구입처</GreenTd>
+        <FieldTd align='center'>번호</FieldTd>
+        <FieldTd align='center'>품목</FieldTd>
+        <FieldTd align='center'>가격</FieldTd>
+        <FieldTd align='center'>구입처</FieldTd>
       </tr>
 
-      {/* Expense 컴포넌트 들어갈 자리 */}
+      {/* Expense(지출항목) 컴포넌트 들어갈 자리 */}
       {children}
 
       <tr>
-        <LimeTd align="center">개수</LimeTd>
-        <LimeTd align="left" colSpan={3}>
-          {children.length}
-        </LimeTd>
+        <ResultTd align='center'>지출항목수</ResultTd>
+        {/* colspan: 가로로 병합 */}
+        <ResultTd align='left' colSpan={3}>
+          {/* (= Expense 길이) */}
+          &nbsp;{children.length}
+        </ResultTd>
       </tr>
       <tr>
-        <LimeTd align="center">총지출</LimeTd>
-        <LimeTd align="left" colSpan={3}>
-          {formatMoney(total)}
-        </LimeTd>
+        <ResultTd align='center'>총지출</ResultTd>
+        <ResultTd align='left' colSpan={3}>
+          {/* 총지출 금액을 천 단위로 구분 */}
+          &nbsp;{formatMoney(total)}
+        </ResultTd>
       </tr>
       <tr>
-        <LimeTd align="center">잔액</LimeTd>
-        {/* income이 total보다 적을 때만 minus가 true */}
-        <LimeTd align="left" colSpan={3} minus={income < total}>
-          {/* ++ "[적자]" 글자 띄우기 */}
-          {income < total ? "[적자]" : null}
-          {formatMoney(income - total)}
-        </LimeTd>
+        <ResultTd align='center'>잔액</ResultTd>
+        {/* minus props에 조건문 (income이 total보다 적을 때만 true) */}
+        <ResultTd align='left' colSpan={3} minus={income < total}>
+          {/* 잔액이 minus이면 앞에 "[적자]" */}
+          {income < total ? '[적자]' : null}
+          {/* 잔액 = 수입 - 총지출 */}
+          &nbsp;{formatMoney(income - total)}
+        </ResultTd>
       </tr>
     </tbody>
   );
 };
 
+// 맨 왼쪽의 항목별 번호
 const IndexTd = styled.td`
-  background: #0000ff;
-  color: #ffffff;
+  background: #835151;
+  color: #fff;
   text-align: center;
+  width: 20px;
 `;
 
+// 연필 아이콘 있는 영역 (연필 아이콘 = <EditIcon/>)
 const ModifyButton = styled.div`
-  font-size: 1rem;
   float: right;
+  /* hover 하기 전에는 렌더 트리에 요소 자체가 없어야 함 */
   display: none;
   cursor: pointer;
 `;
 
-const GreenTd = styled.td`
-  background: #00ff00;
+// 항목별 품목, 가격, 구입처 등 필드 영역
+const FieldTd = styled.td`
+  background: #c2f784;
   color: #000000;
   text-align: ${(props) => props.align};
+  height: 26px;
+
+  /* 필드 영역에 마우스 hover하면 연필 아이콘 등장 */
   &:hover ${ModifyButton} {
     display: block;
   }
 `;
 
-const LimeTd = styled.td`
-  background: #a3dd08;
-  color: ${(props) => (props.minus ? "#ff0000" : "#000000")};
+// 항목별 아래 지출항목수, 총지출, 잔액
+const ResultTd = styled.td`
+  background: #ffc1c1;
+  color: ${(props) => (props.minus ? '#ff0000' : '#000')};
   text-align: ${(props) => props.align};
+  height: 26px;
 `;
 
+// 수입 수정 input
 const IncomeTextField = styled.input`
   border: none;
   background: transparent;
   width: 100%;
-  font-size: 1rem;
+  font-size: 16px;
 `;
 
 export default Daily;

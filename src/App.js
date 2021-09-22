@@ -1,35 +1,35 @@
-import React, { useState } from "react";
-import { data as initialData } from "./lib/data.json";
-import styled from "styled-components";
-import Household from "./components/Household";
-import Daily from "./components/Daily";
-import Expense from "./components/Expense";
-import Form from "./components/Form";
+import React, { useState } from 'react';
+import { data as initialData } from './lib/data.json';
+import styled from 'styled-components';
+import Household from './components/Household';
+import Daily from './components/Daily';
+import Expense from './components/Expense';
+import Form from './components/Form';
 
 function App() {
   // 로컬스토리지에서 data를 가져옴
-  const localData = localStorage.getItem("data");
+  const localData = localStorage.getItem('data');
   // 로컬스토리지에 data가 있으면 JSON화 해서 사용, 없으면 data.json의 데이터 사용
   // (로컬스토리지는 문자열 데이터만 저장)
   const getData = localData ? JSON.parse(localData) : initialData;
 
   // Form에 로컬스토리지 또는 data.json에서 가져온 data 넘겨주기
   const [data, setData] = useState(getData);
-  // modify는 수정할지 '여부'인데 여기서는 수정여부가 해당 칸에 hover를 했는지 안 했는지(css)이므로 modify 자체를 true/false로 판별하기가 애매함
+  // modify는 수정할지 '여부'인데 여기서는 수정여부가 해당 칸에 hover를 했는지 안 했는지(css)이므로 modify 자체를 true/false로 판별하기 애매함
   //  => props를 넘길 때 항상 자체적으로 넘어가는 index를 활용
   const [modify, setModify] = useState();
 
+  // 데이터 정렬하기
   const sortedData = data
     // 날짜별 먼저 정렬 (a, b 자체가 객체로 꺼낸 것이어서 daily 사용 x)
     .sort((a, b) => {
       // 문자열이어서 단순한 마이너스 연산은 안됨
       //  => data.sort((a, b) => a.date - b.date) (x)
       // 비교 연산(>, <)은 가능
-      if (a.date > b.date) return -1;
-      else if (b.date > a.date) return 1;
+      if (a.date > b.date) return 1;
+      else if (b.date > a.date) return -1;
       else return 0;
     })
-
     // 이후 구입처별 정렬
     .map((daily) => {
       const sortedExpenses = daily.expenses.sort((a, b) => {
@@ -47,6 +47,7 @@ function App() {
       };
     });
 
+  // 삭제하기
   const handleRemove = (id) => {
     const removedData = data.map((daily) => {
       return {
@@ -56,7 +57,7 @@ function App() {
     });
     // 로컬스토리지에서도 삭제
     // (로컬스토리지에 삭제가 완료된 데이터를 넣기 위해 문자열화)
-    localStorage.setItem("data", JSON.stringify(removedData));
+    localStorage.setItem('data', JSON.stringify(removedData));
     setData(removedData);
   };
 
@@ -78,7 +79,7 @@ function App() {
     );
 
     // 로컬스토리지에 업데이트
-    localStorage.setItem("data", JSON.stringify(modifiedIncome));
+    localStorage.setItem('data', JSON.stringify(modifiedIncome));
     // 수정한 수입이 들어간 data로 data 업데이트
     setData(modifiedIncome);
   };
@@ -86,6 +87,7 @@ function App() {
   return (
     <Container>
       <Household>
+        {/* Household 안에 sort된 Daily */}
         {sortedData.map((daily, idx) => (
           <Daily
             key={idx}
@@ -101,6 +103,7 @@ function App() {
             setModify={setModify}
             onModify={handleModifyIncome}
           >
+            {/* Daily 안에 Expense */}
             {daily.expenses.map((expense, idx) => (
               <Expense
                 key={idx}
@@ -115,6 +118,8 @@ function App() {
           </Daily>
         ))}
       </Household>
+
+      {/* 화면 우측의 입력 폼 */}
       <Form data={data} setData={setData} />
     </Container>
   );

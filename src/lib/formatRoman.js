@@ -1,6 +1,6 @@
 const formatRoman = (num) => {
   // 반환할 로마숫자 (string)
-  let roman = "";
+  let roman = '';
 
   // 로마숫자를 key: value 형식으로 가져옴
   const romanNumList = {
@@ -19,7 +19,7 @@ const formatRoman = (num) => {
     I: 1,
   };
 
-  // a를 전역변수로 선언 (왜??)
+  // a를 전역변수로 선언 (for문이 돌 때마다 매번 선언하지 않도록?)
   let a;
 
   // for-in문
