@@ -38,4 +38,4 @@ React로 구현한 가계부 <br/>
 <img src="https://user-images.githubusercontent.com/68722179/187891878-ceb5cc8d-b83b-48b3-8cdb-e5cc600fdb01.png" width="650" height="auto">
 
 
-#### [참고사이트](https://chojonghoon.github.io/react/report/household/report-household/) (Typescript 파트는 이후에 추가 예정)
+#### [참고사이트](https://chojonghoon.github.io/react/report/household/report-household/) (Typescript 파트는 이후에 추가)
