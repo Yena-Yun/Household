@@ -28,14 +28,14 @@ React로 구현한 가계부 <br/>
 
 ---
 ## 컴포넌트 구분
-<img src="https://i.esdrop.com/d/KwrGH1p1Zl/v5nSLzxOqX.png" width="350" height="auto"> <br/>
+<img src="https://i.esdrop.com/d/KwrGH1p1Zl/v5nSLzxOqX.png" width="300" height="auto"> <br/>
 1. Household(빨간색) : 전체 컨테이너
 2. Daily(주황색) : 날짜별 수입 및 지출내역
 3. Expense(보라색) : 같은 날짜 내의 하나의 지출항목<br/>
 
 ---
 ## 완성본
-<img src="https://i.esdrop.com/d/KwrGH1p1Zl/Yb6jTbLH3M.png" width="500" height="auto">
+<img src="https://user-images.githubusercontent.com/68722179/187891878-ceb5cc8d-b83b-48b3-8cdb-e5cc600fdb01.png" width="650" height="auto">
 
 
 #### [참고사이트](https://chojonghoon.github.io/react/report/household/report-household/) (Typescript 파트는 이후에 추가 예정)
