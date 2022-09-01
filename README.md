@@ -1,8 +1,7 @@
 # Household
 React로 구현한 가계부 <br/>
 
-### [참고사이트](https://chojonghoon.github.io/react/report/household/report-household/)
-#### (Typescript 파트는 이후에 추가 예정)
+### [배포 링크](https://yena-yun.github.io/household/)
 
 ---
 ## 요구사항
@@ -37,3 +36,6 @@ React로 구현한 가계부 <br/>
 ---
 ## 완성본
 <img src="https://i.esdrop.com/d/KwrGH1p1Zl/Yb6jTbLH3M.png" width="500" height="auto">
+
+
+#### [참고사이트](https://chojonghoon.github.io/react/report/household/report-household/) (Typescript 파트는 이후에 추가 예정)
